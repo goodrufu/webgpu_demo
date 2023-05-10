@@ -1,0 +1,9 @@
+node_modules
+lib
+test/unit/coverage
+dist
+es
+example
+.vscode
+scripts
+README.md

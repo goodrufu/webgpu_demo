@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "typeRoots": [
+      "./node_modules/@webgpu/types",
+      "./node_modules/@types"
+    ],
+    "strict": true,
+    "jsx": "preserve",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "lib": [
+      "esnext",
+      "dom"
+    ],
+    "baseUrl": "./",
+    "allowJs": true,
+    "paths": {
+      "~src/*": [
+        "src/*"
+      ]
+    },
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "./*.ts",
+    "./*.js",
+  ]
+}
