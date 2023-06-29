@@ -3,9 +3,10 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "typeRoots": [
-      "./node_modules/@webgpu/types",
-      "./node_modules/@types"
+    "types": [
+      "vite/client",
+      "@webgpu/types",
+      "@types/dom-webcodecs"
     ],
     "strict": true,
     "jsx": "preserve",
@@ -24,12 +25,5 @@
       ]
     },
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "./*.ts",
-    "./*.js",
-  ]
+  "include": ["src"]
 }

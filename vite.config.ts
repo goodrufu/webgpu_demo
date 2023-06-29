@@ -48,6 +48,7 @@ export default ({ command }: ConfigEnv): UserConfig => {
     },
     server: {
       host: true /** 启动ip访问地址 */,
+      port: 8080,
       proxy: {
         // '/api': {
         //   target: 'http://auto-scene.flymeauto.com',

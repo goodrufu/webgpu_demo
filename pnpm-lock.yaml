@@ -1,6 +1,7 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/dom-webcodecs': ^0.1.8
   '@types/node': ^18.15.11
   '@types/prompts': ^2.4.4
   '@typescript-eslint/eslint-plugin': ^5.57.1
@@ -16,6 +17,7 @@ specifiers:
   vite: ^4.3.3
 
 devDependencies:
+  '@types/dom-webcodecs': 0.1.8
   '@types/node': 18.16.2
   '@types/prompts': 2.4.4
   '@typescript-eslint/eslint-plugin': 5.59.1_2utyh6gct5glvuz6qwradubqqa
@@ -306,6 +308,10 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+    dev: true
+
+  /@types/dom-webcodecs/0.1.8:
+    resolution: {integrity: sha512-KThTPaGQJLITk8Q0XkEkz+GqFdoWDyQfbyeJmfEUagB15TZQdNx5AqP2b7GP6vkVM6X/6T1Z8EHxA8RgHfY9BA==}
     dev: true
 
   /@types/json-schema/7.0.11:

@@ -1,31 +1,80 @@
 <!DOCTYPE html>
-<html lang="zh-cmn">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <link rel="icon" href="/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="renderer" content="webkit" />
-  <meta name="viewport"
-    content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
-  <title>webGPU_demo</title>
-
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>webGPU_demo</title>
+    <style>
+        html,
+        body {
+          font-family: Avenir,Helvetica,Arial,sans-serif;
+          -webkit-font-smoothing: antialiased;
+          margin: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+        }
+        .menu{
+          width: 200px;
+          height: 100%;
+          border-right: 1px solid #888;
+          overflow: auto;
+          padding: 0 10px;
+        }
+        .content {
+          flex: 1;
+          width: 1;
+        }
+        .content .canvas {
+          display: none;
+          width: 100%;
+          height: 100vh;
+        }
+        .canvas.active {
+          display: block;
+        }
+        .menu > a{
+          display: block;
+          margin: 5px 0;
+          color: #045b88;
+          text-decoration: none;
+          cursor: pointer;
+        }
+        a.active{
+          color: red;
+        }
+    </style>
 </head>
-
 <body>
-  <div id="app" style="display: flex; justify-content: center;">
-    <canvas width="800" height="500" id="canvas"></canvas>
-  </div>
-  <script type="module" src="/src/main.ts"></script>
-</body>
+  <div class="menu">
+    <h3>webGPU_demo</h3>
+    <a href="https://github.com/goodrufu/webGPU_demo" target="_blank">Github</a>
+    <hr>
 
+    <a class="sample active" target="basicTriangle">Basic Triangle</a>
+  </div>
+
+  <div class="content">
+    <canvas class="canvas active basicTriangle"></canvas>
+  </div>
+
+  <script>
+      const menus = document.querySelectorAll('.sample')
+      for(let menu of menus){
+        menu.addEventListener('click', ()=>{
+          document.querySelectorAll('.active').forEach(node => {
+            node.classList.remove('active')
+          })
+          const target = document.querySelector(`.${menu.target}`)
+
+          target.classList.add('active')
+          menu.classList.add('active')
+        })
+      }
+
+      document.querySelector('.sample.active').click()
+  </script>
+
+  <script type="module" src="/src/triangle/index.ts"></script>
+</body>
 </html>
