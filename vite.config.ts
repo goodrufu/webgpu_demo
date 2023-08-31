@@ -47,7 +47,6 @@ export default ({ command }: ConfigEnv): UserConfig => {
       outDir: './dist'
     },
     server: {
-      host: true /** 启动ip访问地址 */,
       port: 8080,
       proxy: {
         // '/api': {

@@ -25,13 +25,10 @@
           flex: 1;
           width: 1;
         }
-        .content .canvas {
-          display: none;
-          width: 100%;
-          height: 100vh;
-        }
-        .canvas.active {
-          display: block;
+        .content .iframe {
+          width: 100%; 
+          height: 100%;
+          border: none;
         }
         .menu > a{
           display: block;
@@ -51,23 +48,27 @@
     <a href="https://github.com/goodrufu/webGPU_demo" target="_blank">Github</a>
     <hr>
 
-    <a class="sample active" target="basicTriangle">Basic Triangle</a>
+    <a class="sample active" target="triangle">Basic Triangle</a>
+    <a class="sample active" target="vertexSlot">顶点插槽</a>
+    <a class="sample active" target="resourceBinding">资源绑定</a>
   </div>
 
   <div class="content">
-    <canvas class="canvas active basicTriangle"></canvas>
+    <iframe class="iframe"></iframe>
   </div>
 
   <script>
       const menus = document.querySelectorAll('.sample')
+      const frame = document.querySelector('.iframe')
+
       for(let menu of menus){
         menu.addEventListener('click', ()=>{
-          document.querySelectorAll('.active').forEach(node => {
+          menus.forEach(node => {
             node.classList.remove('active')
           })
-          const target = document.querySelector(`.${menu.target}`)
+          const targetPath = menu.getAttribute('target')
+          frame.src = `./page/${targetPath}.html`
 
-          target.classList.add('active')
           menu.classList.add('active')
         })
       }
@@ -75,6 +76,5 @@
       document.querySelector('.sample.active').click()
   </script>
 
-  <script type="module" src="/src/triangle/index.ts"></script>
 </body>
 </html>

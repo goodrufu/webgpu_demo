@@ -1,9 +1,11 @@
 import vertex from './vertex.wgsl?raw'
 import fragment from './fragment.wgsl?raw'
 
-const presentationFormat = navigator.gpu.getPreferredCanvasFormat()
-
 async function init_device (canvas: HTMLCanvasElement) {
+  if (!canvas) {
+    throw new Error('缺失canvas dom元素')
+  }
+
   if (!navigator.gpu) {
     throw new Error('不支持webGPU')
   }
@@ -18,14 +20,12 @@ async function init_device (canvas: HTMLCanvasElement) {
   // 通过适配器获取设备
   const device = await adapter.requestDevice()
 
-  if (!canvas) {
-    throw new Error('缺失canvas dom元素')
-  }
-
   // 设置canvas尺寸
   const devicePixelRatio = window.devicePixelRatio || 1
   canvas.width = canvas.clientWidth * devicePixelRatio
   canvas.height = canvas.clientHeight * devicePixelRatio
+
+  const presentationFormat = navigator.gpu.getPreferredCanvasFormat()
 
   // 关联canvas 和 gpu
   const content = canvas.getContext('webgpu') as GPUCanvasContext
@@ -35,10 +35,10 @@ async function init_device (canvas: HTMLCanvasElement) {
     alphaMode: 'premultiplied'
   })
 
-  return { device, content }
+  return { device, content, presentationFormat }
 }
 
-async function init_pipeline (device: GPUDevice) {
+async function init_pipeline (device: GPUDevice, presentationFormat: GPUTextureFormat) {
   const pipeline = await device.createRenderPipelineAsync({
     layout: 'auto',
     vertex: { // 顶点着色器
@@ -82,9 +82,10 @@ function draw (device: GPUDevice, content: GPUCanvasContext, pipeline: GPURender
 }
 
 async function run () {
-  const canvas_dom: HTMLCanvasElement = document.querySelector('.basicTriangle')!
-  const { device, content } = await init_device(canvas_dom)
-  const { pipeline } = await init_pipeline(device)
+  const canvas_dom: HTMLCanvasElement = document.querySelector('canvas')!
+
+  const { device, content, presentationFormat } = await init_device(canvas_dom)
+  const { pipeline } = await init_pipeline(device, presentationFormat)
 
   draw(device, content, pipeline)
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>资源绑定</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #fff;
+            display: flex;
+            text-align: center;
+            flex-direction: column;
+            justify-content: center;
+        }
+        p{
+            font-size: 14px;
+            margin:0
+        }
+        canvas {
+           width: 100%;
+           height: 100%; 
+        }
+
+        .input_box {
+            position: fixed;
+            right: 10px;
+            top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <div class="input_box">
+        <div>
+            <label>顶部</label>
+            <input class="color_top" type="color" value="#ff0000"/>
+        </div>
+        <div>
+            <label>左下</label>
+            <input class="color_left" type="color" value="#00ff00"/>
+        </div>
+        <div>
+            <label>右下</label>
+            <input class="color_right" type="color" value="#0000ff"/>
+        </div>
+    </div>
+    <script type="module" src="/src/resourceBinding/index.ts"></script>
+</body>
+</html>
