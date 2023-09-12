@@ -25,5 +25,8 @@
     "eslint-plugin-promise": "^6.1.1",
     "typescript": "^5.0.4",
     "vite": "^4.3.3"
+  },
+  "dependencies": {
+    "wgpu-matrix": "^2.5.0"
   }
 }

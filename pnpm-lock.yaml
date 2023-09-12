@@ -15,6 +15,10 @@ specifiers:
   eslint-plugin-promise: ^6.1.1
   typescript: ^5.0.4
   vite: ^4.3.3
+  wgpu-matrix: ^2.5.0
+
+dependencies:
+  wgpu-matrix: 2.5.0
 
 devDependencies:
   '@types/dom-webcodecs': 0.1.8
@@ -1937,6 +1941,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /wgpu-matrix/2.5.0:
+    resolution: {integrity: sha512-2y/yyQwEX4m00SD9U00Rdm2p+5D0vMAJqqT0zsmVD+8ndYLEA+AhL2cG99CUWBuuMddLazukBHCvL3qi1bi0nQ==}
+    dev: false
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha1-E3V7yJsgmwSf5dhkMOIc9AqJqOY=}
