@@ -165,7 +165,7 @@ async function init() {
   const { mvpBuffer, mvpGroup, pipeline, textureGroup } = await init_pipeline(device, format)
   const { modelBuffer } = write_vertex_buffer(device)
 
-  const perspective = mat4.perspective(Math.PI / 3, canvasInfo.width / canvasInfo.height, 0.1, 100)
+  const perspective = mat4.perspective(Math.PI / 3, canvasInfo.width / canvasInfo.height, 1, 100)
 
   const pos = { x: 0, y: 0, z: -5 }
   // const rotation = { x: -0.5, y: 0.5, z: 0 }

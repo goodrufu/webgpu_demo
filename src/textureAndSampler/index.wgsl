@@ -20,7 +20,7 @@ fn vertex_main (@location(0) pos: vec3<f32>, @location(1) uv: vec2<f32>) -> Vert
 }
 
 @fragment
-fn fragment_main(fragData: VertexObj, @builtin(sample_index) SampleIndex: u32) -> @location(0) vec4<f32> {
+fn fragment_main(fragData: VertexObj) -> @location(0) vec4<f32> {
   // return  textureSample(Texture, Sampler, fragData.uv) * fragData.color;
   return  textureSample(Texture, Sampler, fragData.uv);
 }
