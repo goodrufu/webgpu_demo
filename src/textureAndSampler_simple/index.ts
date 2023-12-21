@@ -31,6 +31,22 @@ async function init_device() {
 }
 
 async function init_pipeline(device: GPUDevice, format: GPUTextureFormat) {
+  const pipeline = await device.createRenderPipelineAsync({
+    layout: 'auto',
+    vertex: {
+      module: device.createShaderModule({ code: wgsl }),
+      entryPoint: 'vertex_main'
+    },
+    fragment: {
+      module: device.createShaderModule({ code: wgsl }),
+      entryPoint: 'fragment_main',
+      targets: [{ format }]
+    },
+    primitive: {
+      topology: 'triangle-list'
+    }
+  })
+
   /** 通过fetch加载图片资源 */
   const res = await fetch(imgUrl)
   const bitmap = await createImageBitmap(await res.blob())
@@ -50,60 +66,29 @@ async function init_pipeline(device: GPUDevice, format: GPUTextureFormat) {
   /** 创建采样规则 */
   const sampler = device.createSampler({
     /**
-     * 自带采样算法：
-     * nearest：临近采样，结果：图像放到最大时出现锯齿；
-     * linear：线性采样，结果：图像放到最大时，图像边缘模糊过渡
-     *
-     * 通常处理方式：可以选择更高质量素材（图片）
-     * */
+       * 自带采样算法：
+       * nearest：临近采样，结果：图像放到最大时出现锯齿；
+       * linear：线性采样，结果：图像放到最大时，图像边缘模糊过渡
+       *
+       * 通常处理方式：可以选择更高质量素材（图片）
+       * */
     magFilter: 'linear',
     minFilter: 'linear',
     /** 图像uv小于显示面积，空白部分应该如何处理：
-     * clamp-to-edge：临近采样，取空白部分最接近图像的片元颜色；
-     * repeat：图像重复；
-     * mirror-repeat：图像反转重复
-     *  */
+       * clamp-to-edge：临近采样，取空白部分最接近图像的片元颜色；
+       * repeat：图像重复；
+       * mirror-repeat：图像反转重复
+       *  */
     addressModeU: 'repeat',
     addressModeV: 'mirror-repeat'
   })
 
-  const textureGroupLayout = device.createBindGroupLayout({
-    entries: [
-      {
-        binding: 0,
-        visibility: GPUShaderStage.FRAGMENT,
-        sampler: {}
-      },
-      {
-        binding: 1,
-        visibility: GPUShaderStage.FRAGMENT,
-        texture: {}
-      }
-    ]
-  })
-
   const textureGroup = device.createBindGroup({
-    layout: textureGroupLayout,
+    layout: pipeline.getBindGroupLayout(0),
     entries: [
       { binding: 0, resource: sampler },
       { binding: 1, resource: texture.createView() }
     ]
-  })
-
-  const pipeline = await device.createRenderPipelineAsync({
-    layout: device.createPipelineLayout({ bindGroupLayouts: [textureGroupLayout] }),
-    vertex: {
-      module: device.createShaderModule({ code: wgsl }),
-      entryPoint: 'vertex_main'
-    },
-    fragment: {
-      module: device.createShaderModule({ code: wgsl }),
-      entryPoint: 'fragment_main',
-      targets: [{ format }]
-    },
-    primitive: {
-      topology: 'triangle-list'
-    }
   })
 
   return { pipeline, textureGroup }

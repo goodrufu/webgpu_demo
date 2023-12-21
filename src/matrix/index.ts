@@ -33,7 +33,7 @@ async function init_device() {
 
 async function init_pipeline(device: GPUDevice, format: GPUTextureFormat) {
   const modelData = new Float32Array([ // 正方体vertex数据， 这里不使用齐次坐标，在shader中补充就行了
-  // face1
+    // face1
     +1, -1, +1,
     -1, -1, +1,
     -1, -1, -1,

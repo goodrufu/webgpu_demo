@@ -90,7 +90,14 @@ async function init() {
     minFilter: 'linear'
   })
 
+  /**
+   * 因为视频是一个持续过程，所以，需要进行iframe持续拷贝；
+   * 图像是加载，然后转成bitmap，通过group提供给shader处理，因此图像api copyExternalImageToTexture 是在内存一直存在，直到主动释放；
+   * 与图像不一样，视频是需要用完立即释放，然后再引入新的图像，刷新率高的情况下，看起来连续，在视觉上形成视频，
+   * 因此，图像的api不适用，需要针对视频的API importExternalTexture 进行处理，iframe结束，即立刻释放资源
+   * */
   function iframe() {
+    /** importExternalTexture 是对于视频的api */
     const texture = device.importExternalTexture({ source: videoDom })
     const textureGroup = device.createBindGroup({
       layout: pipeline.getBindGroupLayout(0),

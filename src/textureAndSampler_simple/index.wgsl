@@ -1,3 +1,4 @@
+/** sampler类型 */
 @group(0) @binding(0) var Sampler: sampler;
 /** texture_2d针对图像的类型 */
 @group(0) @binding(1) var Texture: texture_2d<f32>;
@@ -26,6 +27,14 @@ fn vertex_main(@builtin(vertex_index) VertexIndex: u32) -> VertexObj {
     // vec2(1, 1),
     // vec2(0, 0),
     // vec2(1, 0)
+
+    /** 反转 */
+    // vec2(1, 1),
+    // vec2(0, 1),
+    // vec2(1, 0),
+    // vec2(0, 1),
+    // vec2(1, 0),
+    // vec2(0, 0)
 
     /** 
     * uv大于四边形面积，则表示缩小图像，空白地方的处理，
