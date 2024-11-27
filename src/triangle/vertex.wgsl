@@ -11,6 +11,7 @@ fn main( // vertex所有代码的入口函数，在创建pipeline是描述的：
     vec2(0.75, 0.5),
     vec2(1, -0.5),
   );
+  
 
   return vec4<f32>(pos[VertexIndex], 0.0, 1.0);
 }

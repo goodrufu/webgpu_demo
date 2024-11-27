@@ -1,36 +1,36 @@
-import wgsl from './index.wgsl?raw'
+import wgsl from './index.wgsl?raw';
 
 async function init_device() {
-  const canvas = document.querySelector('canvas')
+  const canvas = document.querySelector('canvas');
   if (!canvas) {
-    throw new Error('找不到canvas节点')
+    throw new Error('找不到canvas节点');
   }
 
   if (!navigator.gpu) {
-    throw new Error('该浏览器不支持WebGPU')
+    throw new Error('该浏览器不支持WebGPU');
   }
 
-  const adapter = await navigator.gpu.requestAdapter()
+  const adapter = await navigator.gpu.requestAdapter();
   if (!adapter) {
-    throw new Error('WebGPU初始化失败')
+    throw new Error('WebGPU初始化失败');
   }
 
-  const device = await adapter.requestDevice()
+  const device = await adapter.requestDevice();
 
-  const format = navigator.gpu.getPreferredCanvasFormat()
+  const format = navigator.gpu.getPreferredCanvasFormat();
 
-  const devicePixelRate = window.devicePixelRatio || 1
-  canvas.width = canvas.clientWidth * devicePixelRate
-  canvas.height = canvas.clientHeight * devicePixelRate
+  const devicePixelRate = window.devicePixelRatio || 1;
+  canvas.width = canvas.clientWidth * devicePixelRate;
+  canvas.height = canvas.clientHeight * devicePixelRate;
 
-  const content = canvas.getContext('webgpu')!
+  const content = canvas.getContext('webgpu')!;
   content.configure({
     device,
     format,
     alphaMode: 'premultiplied'
-  })
+  });
 
-  return { device, format, content }
+  return { device, format, content };
 }
 
 async function init_pipeline(device: GPUDevice, format: GPUTextureFormat) {
@@ -48,87 +48,107 @@ async function init_pipeline(device: GPUDevice, format: GPUTextureFormat) {
     primitive: {
       topology: 'triangle-list'
     }
-  })
+  });
 
-  const colorBuffer = device.createBuffer({ // 创建一个buffer
+  const colorBuffer = device.createBuffer({
+    // 创建一个buffer
     size: 48, // 设置创建与传入数据大小一样的buffer，也可以写成： 4 * 4（4个字节 * rgba * 3）
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST // 申请GPU的权限，如果没有申请，则无权限操作
-  })
+  });
 
   const colorGroup = device.createBindGroup({
     layout: pipeline.getBindGroupLayout(0),
-    entries: [{
-      binding: 0,
-      resource: {
-        buffer: colorBuffer
+    entries: [
+      {
+        binding: 0,
+        resource: {
+          buffer: colorBuffer
+        }
       }
-    }]
-  })
+    ]
+  });
 
-  return { pipeline, colorBuffer, colorGroup }
+  return { pipeline, colorBuffer, colorGroup };
 }
 
-function draw(device: GPUDevice, pipeline: GPURenderPipeline, content: GPUCanvasContext, colorGroup: GPUBindGroup) {
-  const textureView = content.getCurrentTexture().createView()
-  const commandEncoder = device.createCommandEncoder()
+function draw(
+  device: GPUDevice,
+  pipeline: GPURenderPipeline,
+  content: GPUCanvasContext,
+  colorGroup: GPUBindGroup
+) {
+  const textureView = content.getCurrentTexture().createView();
+  const commandEncoder = device.createCommandEncoder();
   const passEncoder = commandEncoder.beginRenderPass({
-    colorAttachments: [{
-      view: textureView,
-      clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
-      loadOp: 'clear',
-      storeOp: 'store'
-    }]
-  })
+    colorAttachments: [
+      {
+        view: textureView,
+        clearValue: { r: 0.0, g: 0.0, b: 0.0, a: 1.0 },
+        loadOp: 'clear',
+        storeOp: 'store'
+      }
+    ]
+  });
 
-  passEncoder.setPipeline(pipeline)
+  passEncoder.setPipeline(pipeline);
   // 设置group在当前pipeline的位置：0，并将内存区域设置进去，shader中@group(0) 就可以获取group了
-  passEncoder.setBindGroup(0, colorGroup)
-  passEncoder.draw(3)
-  passEncoder.end()
+  passEncoder.setBindGroup(0, colorGroup);
+  passEncoder.draw(3);
+  passEncoder.end();
 
-  device.queue.submit([commandEncoder.finish()])
+  device.queue.submit([commandEncoder.finish()]);
 }
 
-const color_data = [ // 颜色是float类型，占4个字节，每一个行的数据表示color：rgba
+const color_data = [
+  // 颜色是float类型，占4个字节，每一个行的数据表示color：rgba
   [1, 0, 0, 1],
   [0, 1, 0, 1],
   [0, 0, 1, 1]
-]
+];
 async function init() {
-  const { device, content, format } = await init_device()
-  const { pipeline, colorBuffer, colorGroup } = await init_pipeline(device, format)
+  const { device, content, format } = await init_device();
+  const { pipeline, colorBuffer, colorGroup } = await init_pipeline(
+    device,
+    format
+  );
 
   const setBuffer2Draw = () => {
-    const colorArray = new Float32Array(color_data.flat(2)) // 接收的数据类型是f32，所以，我们的数据也得是f32的
+    const colorArray = new Float32Array(color_data.flat(2)); // 接收的数据类型是f32，所以，我们的数据也得是f32的
     // 将buffer写入queue（可以理解为shader gpu的内存），但是，还没有关联对应的pipeline
-    device.queue.writeBuffer(colorBuffer, 0, colorArray, 0, colorArray.length)
+    device.queue.writeBuffer(colorBuffer, 0, colorArray, 0, colorArray.length);
 
-    draw(device, pipeline, content, colorGroup)
-  }
+    draw(device, pipeline, content, colorGroup);
+  };
 
-  setBuffer2Draw()
+  setBuffer2Draw();
 
   const getData2Draw = (e: Event, index: number) => {
-    const color = (e.target as HTMLInputElement).value
-    const r = +('0x' + color.slice(1, 3)) / 255
-    const g = +('0x' + color.slice(3, 5)) / 255
-    const b = +('0x' + color.slice(5, 7)) / 255
-    color_data[index] = [r, g, b, 1]
+    const color = (e.target as HTMLInputElement).value;
+    const r = +('0x' + color.slice(1, 3)) / 255;
+    const g = +('0x' + color.slice(3, 5)) / 255;
+    const b = +('0x' + color.slice(5, 7)) / 255;
+    color_data[index] = [r, g, b, 1];
 
-    setBuffer2Draw()
-  }
+    setBuffer2Draw();
+  };
 
-  document.querySelector('.color_top')?.addEventListener('input', (e: Event) => {
-    getData2Draw(e, 0)
-  })
-  document.querySelector('.color_left')?.addEventListener('input', (e: Event) => {
-    getData2Draw(e, 1)
-  })
-  document.querySelector('.color_right')?.addEventListener('input', (e: Event) => {
-    getData2Draw(e, 2)
-  })
+  document
+    .querySelector('.color_top')
+    ?.addEventListener('input', (e: Event) => {
+      getData2Draw(e, 0);
+    });
+  document
+    .querySelector('.color_left')
+    ?.addEventListener('input', (e: Event) => {
+      getData2Draw(e, 1);
+    });
+  document
+    .querySelector('.color_right')
+    ?.addEventListener('input', (e: Event) => {
+      getData2Draw(e, 2);
+    });
 }
-init()
+init();
 
 // const pc: any = {
 //   js: {
