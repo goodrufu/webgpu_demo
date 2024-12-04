@@ -1,5 +1,5 @@
+import videoUrl from '../assets/video/1.mp4';
 import wgsl from './index.wgsl?raw';
-import videoUrl from './1.mp4?url';
 
 async function init_device() {
   const canvas = document.querySelector('canvas');

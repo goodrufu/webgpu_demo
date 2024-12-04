@@ -1,5 +1,5 @@
 import { mat4 } from 'wgpu-matrix';
-import imgTexture from './1.jpeg?url';
+import imgTexture from '../assets/img/2.jpeg';
 import { vertexAndUvData } from './data';
 import wgsl from './index.wgsl?raw';
 

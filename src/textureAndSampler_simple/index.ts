@@ -1,5 +1,5 @@
+import imgUrl from '../assets/img/3.jpeg';
 import wgsl from './index.wgsl?raw';
-import imgUrl from './1.jpeg?url';
 
 async function init_device() {
   const canvas = document.querySelector('canvas');
